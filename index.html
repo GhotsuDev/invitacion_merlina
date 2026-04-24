@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 Años - Merlina Hazel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-fondo: #fff5f6;
+            --rosa-claro: #fce4e8;
+            --rosa-acento: #e98c9a;
+            --texto: #4a4a4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--rosa-fondo);
+            color: var(--texto);
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* --- Fondo con Estrellas y Corazones --- */
+        .decorations {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .symbol { position: absolute; color: var(--rosa-acento); font-size: 20px; }
+
+        /* --- Botón de Música --- */
+        #music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            border: 1px solid var(--rosa-claro);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 20px;
+        }
+
+        .invitacion-card {
+            background-color: white;
+            max-width: 450px;
+            width: 100%;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 35px;
+            box-shadow: 0 20px 40px rgba(244, 176, 186, 0.2);
+            border: 1px solid var(--rosa-claro);
+            z-index: 10;
+        }
+
+        .inner-padding { padding: 0 30px; }
+
+        .numero-18 {
+            font-family: 'Playfair Display', serif;
+            font-size: 70px;
+            color: var(--rosa-acento);
+            font-style: italic;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 2rem; letter-spacing: 3px; margin-bottom: 15px; }
+        
+        .detalles { border-top: 1px solid var(--rosa-claro); border-bottom: 1px solid var(--rosa-claro); padding: 20px 0; margin-bottom: 30px; }
+
+        /* --- Carrusel Infinito Corregido --- */
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            margin: 20px 0 40px 0;
+            white-space: nowrap;
+        }
+
+        .carousel-track {
+            display: inline-flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        .carousel-track img {
+            width: 250px;
+            height: 350px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            /* Se ajustará dinámicamente con JS */
+            to { transform: translateX(-50%); } 
+        }
+
+        .dress-code { background: var(--rosa-fondo); margin: 0 30px 30px 30px; padding: 20px; border-radius: 20px; border: 1px dashed var(--rosa-acento); }
+        .dress-code h3 { font-size: 0.8rem; letter-spacing: 2px; color: var(--rosa-acento); margin-bottom: 8px; }
+        
+        .btn-ubicacion {
+            display: inline-block;
+            background-color: var(--rosa-acento);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(244, 176, 186, 0.3);
+        }
+
+        .footer { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic; color: var(--rosa-acento); }
+    </style>
+</head>
+<body>
+
+    <div class="decorations" id="decorations"></div>
+
+    <button id="music-toggle">🎵</button>
+    <audio id="bg-music" loop>
+        <source src="./audio/chona.mp3" type="audio/mpeg">
+        <!-- <source src="./audio/bossa.mp3" type="audio/mpeg"> -->
+    </audio>
+
+    <div class="invitacion-card">
+        <div class="inner-padding">
+            <p class="numero-18">-18-</p>
+            <p class="lugar">AÑOS</p>
+            <h1>Merlina Hazel</h1>
+            <p style="font-style: italic; color: #888; margin-bottom: 25px;">"Acompáñame a celebrar este nuevo inicio."</p>
+            
+            <div class="detalles">
+                <p>DOMINGO 18 DE MAYO</p>
+                <p class="lugar" style="color:var(--rosa-acento); font-weight: 600;">BARDA DE EVENTOS EL PLATANAL, CUÉRAMARO</p>
+            </div>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-track" id="carousel-track">
+                </div>
+        </div>
+
+        <div class="inner-padding">
+            <div class="dress-code">
+                <h3>DRESS CODE</h3>
+                <p style="font-size: 0.85rem;">No usar ropa de algodón. Se recomienda <strong>licra o lona</strong>.</p>
+            </div>
+
+            <a href="TU_LINK_DE_MAPS_AQUÍ" target="_blank" class="btn-ubicacion">📍 VER UBICACIÓN</a>
+            <p class="footer">Te espero con alegría</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Configuración de Fotos
+        const fotos = [
+            './images/foto1.jpeg', './images/foto2.jpeg', './images/foto3.jpeg', 
+            './images/foto4.jpeg', './images/foto5.jpeg', './images/foto6.jpg', 
+            './images/foto7.jpg', './images/foto8.jpg', './images/foto9.jpg', 
+            './images/foto10.jpeg', './images/foto11.jpeg', './images/foto12.jpeg',
+            './images/foto13.jpeg', './images/foto14.jpeg', './images/foto15.jpeg', 
+        ];
+
+        // Mezclar fotos aleatoriamente
+        const shuffledFotos = fotos.sort(() => Math.random() - 0.5);
+        const track = document.getElementById('carousel-track');
+
+        // Crear el carrusel (Doble para efecto infinito real)
+        const allFotos = [...shuffledFotos, ...shuffledFotos];
+        allFotos.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            track.appendChild(img);
+        });
+
+        // 2. Control de Música
+        const music = document.getElementById('bg-music');
+        const btn = document.getElementById('music-toggle');
+        
+        btn.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                btn.innerText = '🔊';
+            } else {
+                music.pause();
+                btn.innerText = '🔇';
+            }
+        });
+
+        // 3. Generar estrellas y corazones aleatorios
+        const decoContainer = document.getElementById('decorations');
+        const symbols = ['⭐', '❤', '✨', '🌸'];
+        for (let i = 0; i < 30; i++) {
+            const span = document.createElement('span');
+            span.className = 'symbol';
+            span.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.top = Math.random() * 100 + 'vh';
+            span.style.transform = `rotate(${Math.random() * 360}deg)`;
+            decoContainer.appendChild(span);
+        }
+    </script>
+</body>
+</html>
