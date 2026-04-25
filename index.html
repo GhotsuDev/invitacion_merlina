@@ -11,6 +11,7 @@
             --rosa-claro: #fce4e8;
             --rosa-acento: #e98c9a;
             --texto: #4a4a4a;
+            --rosa-neon: #f5a4dd;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,7 +27,7 @@
             position: relative;
         }
 
-        /* --- Fondo con Estrellas y Corazones --- */
+        /* --- Fondo Decorativo --- */
         .decorations {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -36,7 +37,7 @@
         }
         .symbol { position: absolute; color: var(--rosa-acento); font-size: 20px; }
 
-        /* --- Botón de Música --- */
+        /* --- Botón Música --- */
         #music-toggle {
             position: fixed;
             top: 20px;
@@ -59,7 +60,7 @@
             text-align: center;
             border-radius: 35px;
             box-shadow: 0 20px 40px rgba(244, 176, 186, 0.2);
-            border: 1px solid var(--rosa-claro);
+            border: 5px solid var(--rosa-claro);
             z-index: 10;
         }
 
@@ -76,7 +77,38 @@
         
         .detalles { border-top: 1px solid var(--rosa-claro); border-bottom: 1px solid var(--rosa-claro); padding: 20px 0; margin-bottom: 30px; }
 
-        /* --- Carrusel Infinito Corregido --- */
+        /* --- Estilos del Contador --- */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0 30px 0;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .time-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--rosa-acento);
+            font-style: italic;
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        /* --- Carrusel --- */
         .carousel-container {
             width: 100%;
             overflow: hidden;
@@ -100,7 +132,6 @@
 
         @keyframes scroll {
             from { transform: translateX(0); }
-            /* Se ajustará dinámicamente con JS */
             to { transform: translateX(-50%); } 
         }
 
@@ -128,26 +159,43 @@
 
     <button id="music-toggle">🎵</button>
     <audio id="bg-music" loop>
-        <source src="./audio/chona.mp3" type="audio/mpeg">
-        <!-- <source src="./audio/bossa.mp3" type="audio/mpeg"> -->
+        <source src="./audio/monaco.mp3" type="audio/mpeg">
     </audio>
 
     <div class="invitacion-card">
         <div class="inner-padding">
             <p class="numero-18">-18-</p>
-            <p class="lugar">AÑOS</p>
+            <p style="letter-spacing: 3px; font-size: 0.8rem; margin-bottom: 10px;">AÑOS</p>
             <h1>Merlina Hazel</h1>
-            <p style="font-style: italic; color: #888; margin-bottom: 25px;">"Acompáñame a celebrar este nuevo inicio."</p>
+            <p style="font-style: italic; color: #888; margin-bottom: 20px;">"Acompáñame a celebrar este nuevo inicio."</p>
+
+            <div id="countdown" class="countdown-container">
+                <div class="time-box">
+                    <span id="days" class="time-number">00</span>
+                    <span class="time-label">Días</span>
+                </div>
+                <div class="time-box">
+                    <span id="hours" class="time-number">00</span>
+                    <span class="time-label">Horas</span>
+                </div>
+                <div class="time-box">
+                    <span id="minutes" class="time-number">00</span>
+                    <span class="time-label">Min</span>
+                </div>
+                <div class="time-box">
+                    <span id="seconds" class="time-number">00</span>
+                    <span class="time-label">Seg</span>
+                </div>
+            </div>
             
             <div class="detalles">
                 <p>DOMINGO 17 DE MAYO</p>
-                <p class="lugar" style="color:var(--rosa-acento); font-weight: 600;">BARDA DE EVENTOS EL PLATANAL, CUÉRAMARO</p>
+                <p style="color:var(--rosa-acento); font-weight: 600; margin-top: 5px;">BARDA DE EVENTOS EL PLATANAR, CUÉRAMARO</p>
             </div>
         </div>
 
         <div class="carousel-container">
-            <div class="carousel-track" id="carousel-track">
-                </div>
+            <div class="carousel-track" id="carousel-track"></div>
         </div>
 
         <div class="inner-padding">
@@ -173,11 +221,8 @@
             './images/foto19.jpeg', './images/foto20.jpeg',  
         ];
 
-        // Mezclar fotos aleatoriamente
         const shuffledFotos = fotos.sort(() => Math.random() - 0.5);
         const track = document.getElementById('carousel-track');
-
-        // Crear el carrusel (Doble para efecto infinito real)
         const allFotos = [...shuffledFotos, ...shuffledFotos];
         allFotos.forEach(src => {
             const img = document.createElement('img');
@@ -185,7 +230,31 @@
             track.appendChild(img);
         });
 
-        // 2. Control de Música
+        // 2. Lógica del Contador
+        const targetDate = new Date("May 17, 2026 16:00:00").getTime(); // Ajustado a las 4:00 PM
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "<p class='numero-18' style='font-size: 3rem; margin: 10px 0;'>¡Es hoy!</p>";
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? '0'+d : d;
+            document.getElementById("hours").innerText = h < 10 ? '0'+h : h;
+            document.getElementById("minutes").innerText = m < 10 ? '0'+m : m;
+            document.getElementById("seconds").innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+
+        // 3. Control de Música
         const music = document.getElementById('bg-music');
         const btn = document.getElementById('music-toggle');
         
@@ -199,7 +268,7 @@
             }
         });
 
-        // 3. Generar estrellas y corazones aleatorios
+        // 4. Generar decoraciones
         const decoContainer = document.getElementById('decorations');
         const symbols = ['⭐', '❤', '✨', '🌸'];
         for (let i = 0; i < 30; i++) {
